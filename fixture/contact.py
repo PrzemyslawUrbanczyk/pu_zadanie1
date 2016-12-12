@@ -55,6 +55,7 @@ class ContactHelper:
             wd.find_element_by_name(field_name).send_keys(text)
 
     def delete_first_contact(self):
+        self.open_contacts_page()
         wd = self.app.wd
         self.select_first_contact()
         # confirm deletion
@@ -66,12 +67,17 @@ class ContactHelper:
 
     def modify_first_contact(self, new_contact_data):
         wd = self.app.wd
+        self.open_contacts_page()
         self.select_first_contact()
         # modify contact form
         self.fill_contact_form(new_contact_data)
         # submit contact creation
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
 
+    def open_contacts_page(self):
+        wd = self.app.wd
+        if not (wd.current_url.endswith("index.php") and len(wd.find_elements_by_link_xpath("//div[@id='content']/form[2]/div[1]/input")) > 0):
+            wd.find_element_by_link_text("strona główna").click()
 
     def count(self):
         wd = self.app.wd
