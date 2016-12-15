@@ -4,14 +4,16 @@ from model.contact import Contact
 
 def test_modify_first_contact(app):
     if app.contact.count() == 0:
-        app.contact.create(Contact(first_name="test"))
-    app.contact.modify_first_contact(Contact(first_name="modified", middle_name="modified", last_name="modified",
-                               nickname="modified", company="modified", title="modified",
-                               address="modified", home_number="modified", mobile_number="modified",
-                               work_number="modified", fax="modified", first_email="modified",
-                               second_email="modified", third_email="modified", wwwpage="modified",
-                               birth_year="3000", anniversary_year="3000", second_address="modified",
-                               second_private_number="modified", notes="modified"))
+        app.contact.create(Contact(first_name="test", last_name="test2"))
+    old_contacts = app.contact.get_contact_list()
+    contact = Contact(first_name="test", last_name="test2")
+    contact.id = old_contacts[0].id
+    app.contact.modify_first_contact(contact)
+    new_contacts = app.contact.get_contact_list()
+    assert len(old_contacts) == len(new_contacts)
+    old_contacts[0] = contact
+    assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
+
 
 
 

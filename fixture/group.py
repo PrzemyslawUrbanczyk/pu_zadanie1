@@ -76,9 +76,3 @@ class GroupHelper:
             id = element.find_element_by_name("selected[]").get_attribute("value")
             groups.append(Group(name=text, id=id))
         return groups
-
-    def id_or_max(self):
-        if self.id:
-            return int(self.id)
-        else:
-            return maxsize
