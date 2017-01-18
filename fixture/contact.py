@@ -72,6 +72,19 @@ class ContactHelper:
         wd.switch_to_alert().accept()
         self.contact_cache = None
 
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        self.app.open_home_page()
+        # open deletion
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+        # submit deletion
+        wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
+        wd.switch_to_alert().accept()
+        self.app.open_home_page()
+        self.group_cache = None
+
+
+
     def select_first_contact(self):
         self.select_contact_by_index(0)
 
@@ -90,10 +103,28 @@ class ContactHelper:
         wd.find_element_by_xpath("//div[@id='content']/form[1]/input[22]").click()
         self.contact_cache = None
 
+    def modify_contact_by_id(self, id, contact):
+        wd = self.app.wd
+        self.app.open_home_page()
+        # open modification form
+        checkbox = wd.find_element_by_css_selector("input[value='%s']" % id)
+        row = checkbox.find_element_by_xpath("./../..")
+        cells = row.find_elements_by_tag_name("td")
+        cells[7].click()
+        # fill group form
+        self.fill_contact_form(contact)
+        # submit changes
+        wd.find_element_by_name("update").click()
+
 
     def select_contact_by_index(self, index):
         wd = self.app.wd
         wd.find_elements_by_name("selected[]")[index].click()
+
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        row = wd.find_element_by_css_selector("input[value='%s']" % id)
+        return row
 
     def open_contacts_page(self):
         wd = self.app.wd
@@ -174,3 +205,31 @@ class ContactHelper:
         row = wd.find_elements_by_name("entry")[index]
         cells = row.find_elements_by_tag_name("td")[6]
         cells.find_element_by_tag_name("a").click()
+
+
+    def add_contact_to_group_by_id(self, id, group):
+        wd = self.app.wd
+        if not len(wd.find_elements_by_name("searchstring")) > 0:
+            self.app.open_home_page()
+        # add mew contact
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+        number=group.id
+        wd.find_element_by_xpath("//select[@name='to_group']//option[@value='%s']"% number).click()
+        wd.find_element_by_name("add").click()
+        self.app.open_home_page()
+        self.contact_cache = None
+
+    def add_contact_to_group(self, Contact, group):
+        wd = self.app.wd
+        if not len(wd.find_elements_by_name("searchstring")) > 0:
+            self.app.open_home_page()
+        # add new contact
+        wd.find_element_by_link_text("add new").click()
+        self.fill_contact_form(Contact)
+        number = group.id
+        wd.find_element_by_xpath("//div[@id='content']/form/select[5]//option[@value='%s']" % number).click()
+        # accept
+        wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+        self.app.open_home_page()
+        self.contact_cache = None
+
