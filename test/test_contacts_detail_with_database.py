@@ -20,8 +20,11 @@ def test_contact_details_with_database(app, db):
     address_from_home_page = list(map(lambda i: i.address, sorted(app.contact.get_contact_list(), key=Contact.id_or_max)))
     address_from_database = list(map(lambda j: j.address, sorted(db.get_contact_list(), key=Contact.id_or_max)))
 
+    assert name_from_home_page == name_from_database
+    assert lastname_from_home_page == lastname_from_database
+    assert contact_from_home_page == contact_from_database
+    assert email_from_home_page == email_from_database
     assert address_from_home_page == address_from_database
-    
 
 
 def clear(s):
