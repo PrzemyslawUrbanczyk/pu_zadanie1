@@ -11,20 +11,17 @@ def test_contact_details_with_database(app, db):
     lastname_from_home_page = list(map(lambda c: c.last_name, sorted(app.contact.get_contact_list(), key=Contact.id_or_max)))
     lastname_from_database = list(map(lambda d: d.last_name, sorted(db.get_contact_list(), key=Contact.id_or_max)))
 
-    contact_from_home_page = list(map(lambda f: f.all_phones_from_home_page, sorted(app.contact.get_contact_list(), key=Contact.id_or_max)))
-    contact_from_database = list(map(lambda c: merge_phones_like_on_home_page(c), sorted(db.get_contact_list(), key=Contact.id_or_max)))
+    contact_from_home_page = list(map(lambda e: e.all_phones_from_home_page, sorted(app.contact.get_contact_list(), key=Contact.id_or_max)))
+    contact_from_database = list(map(lambda f: merge_phones_like_on_home_page(f), sorted(db.get_contact_list(), key=Contact.id_or_max)))
 
-    email_from_home_page = list(map(lambda h: h.all_emails_from_home_page, sorted(app.contact.get_contact_list(), key=Contact.id_or_max)))
-    email_from_database = list(map(lambda g: merge_emails_like_on_home_page(g), sorted(db.get_contact_list(), key=Contact.id_or_max)))
+    email_from_home_page = list(map(lambda g: g.all_emails_from_home_page, sorted(app.contact.get_contact_list(), key=Contact.id_or_max)))
+    email_from_database = list(map(lambda h: merge_emails_like_on_home_page(h), sorted(db.get_contact_list(), key=Contact.id_or_max)))
 
-    address_from_home_page = list(map(lambda c: c.address, sorted(app.contact.get_contact_list(), key=Contact.id_or_max)))
-    address_from_database = list(map(lambda c: c.address, sorted(db.get_contact_list(), key=Contact.id_or_max)))
+    address_from_home_page = list(map(lambda i: i.address, sorted(app.contact.get_contact_list(), key=Contact.id_or_max)))
+    address_from_database = list(map(lambda j: j.address, sorted(db.get_contact_list(), key=Contact.id_or_max)))
 
     assert address_from_home_page == address_from_database
-    assert email_from_home_page == email_from_database
-    assert contact_from_home_page == contact_from_database
-    assert name_from_home_page == name_from_database
-    assert lastname_from_home_page == lastname_from_database
+    
 
 
 def clear(s):
